@@ -1,0 +1,16 @@
+package webgl
+
+brief      = "An Idris library to interact with WebGL API"
+version    = 0.1.0
+readme     = README.md
+license    = Apache-2.0
+author     = Pierre Beaucamp
+maintainer = The blau.io contributors
+homepage   = https://github.com/blau-io/idris-webgl
+sourceloc  = https://github.com/blau-io/idris-webgl.git
+bugtracker = https://github.com/blau-io/idris-webgl/issues
+
+sourcedir = src
+pkgs      = idrisscript
+
+modules = API.WebGL.Context
