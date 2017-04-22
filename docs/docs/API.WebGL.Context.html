@@ -2,6 +2,12 @@
 <html><head><title>IdrisDoc: API.WebGL.Context</title><link type="text/css" rel="stylesheet" href="../styles.css"></head><body class="namespace"><div class="wrapper"><header><strong>IdrisDoc</strong>: API.WebGL.Context<nav><a href="../index.html">Index</a></nav></header><div class="container"><h1>API.WebGL.Context</h1><dl class="decls"><dt id="API.WebGL.Context.webGlRenderingContextFromPointer"><span class="name function" title="API.WebGL.Context.webGlRenderingContextFromPointer">webGlRenderingContextFromPointer</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="function" title="IdrisScript.JSRef" href="IdrisScript.html#IdrisScript.JSRef">JSRef</a> ->
 <a class="function" title="JS_IO" href="[builtins].html#JS_IO">JS_IO</a> (<a class="type" title="Prelude.Maybe.Maybe" href="Prelude.Maybe.html#Prelude.Maybe.Maybe">Maybe</a> <a class="function" title="API.WebGL.Context.WebGLRenderingContext" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContext">WebGLRenderingContext</a>)</span></dt><dd><p>webGlRenderingContextFromPointer is a helper function for easily creating<br />
 WebGLRenderingContexts from JavaScript references.</p>
+</dd><dt id="API.WebGL.Context.clearColor"><span class="name function" title="API.WebGL.Context.clearColor">clearColor</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a> ->
+(<span class="boundvar" title="">red</span> : <span class="type" title="Double">Double</span>) ->
+(<span class="boundvar" title="">green</span> : <span class="type" title="Double">Double</span>) ->
+(<span class="boundvar" title="">blue</span> : <span class="type" title="Double">Double</span>) ->
+(<span class="boundvar" title="">alpha</span> : <span class="type" title="Double">Double</span>) ->
+<a class="function" title="JS_IO" href="[builtins].html#JS_IO">JS_IO</a> <a class="type" title="Unit" href="[builtins].html#Unit">()</a></span></dt><dd><p>clearColor sets the clear value of the color buffer.</p>
 </dd><dt id="API.WebGL.Context.WebGLRenderingContextBase"><span class="word">record&nbsp;</span><span class="name type" title="API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</span><span class="type">&nbsp;</span></dt><dd><p>The WebGLRenderingContext represents the API allowing OpenGL ES 2.0 style<br />
 rendering into the canvas element.</p>
 <p>The original specification can be found at<br />
@@ -13,6 +19,7 @@ satisfy the requested widthor height.">drawingBufferWidth</span> : <span class="
 (<span class="documented boundvar" title="The actual height of the drawing buffer. May be different from the height&lt;br /&gt;
 attribute of the HTMLCanvasElement if the implementation is unable to&lt;br /&gt;
 satisfy the requested width or height.">drawingBufferHeight</span> : <span class="type" title="Int">Int</span>) ->
+(<span class="documented boundvar" title="A non standard field for easier JS integration">self</span> : <a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a>) ->
 <a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a></span></dt><dd><dl><dt>canvas</dt><dd><p>A reference to the canvas element which created this context.</p>
 </dd><dt>drawingBufferWidth</dt><dd><p>The actual width of the drawing buffer. May be different from the width<br />
 attribute of the HTMLCanvasElement if the implementation is unable to<br />
@@ -20,6 +27,7 @@ satisfy the requested widthor height.</p>
 </dd><dt>drawingBufferHeight</dt><dd><p>The actual height of the drawing buffer. May be different from the height<br />
 attribute of the HTMLCanvasElement if the implementation is unable to<br />
 satisfy the requested width or height.</p>
+</dd><dt>self</dt><dd><p>A non standard field for easier JS integration</p>
 </dd></dl></dd></dl><dl class="decls"><dt id="API.WebGL.Context.WebGLRenderingContextBase.canvas"><span class="name function" title="API.WebGL.Context.WebGLRenderingContextBase.canvas">canvas</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a>) ->
 <a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a></span></dt><dd><p>A reference to the canvas element which created this context.</p>
 </dd><dt id="API.WebGL.Context.WebGLRenderingContextBase.drawingBufferWidth"><span class="name function" title="API.WebGL.Context.WebGLRenderingContextBase.drawingBufferWidth">drawingBufferWidth</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a>) ->
@@ -30,6 +38,8 @@ satisfy the requested widthor height.</p>
 <span class="type" title="Int">Int</span></span></dt><dd><p>The actual height of the drawing buffer. May be different from the height<br />
 attribute of the HTMLCanvasElement if the implementation is unable to<br />
 satisfy the requested width or height.</p>
+</dd><dt id="API.WebGL.Context.WebGLRenderingContextBase.self"><span class="name function" title="API.WebGL.Context.WebGLRenderingContextBase.self">self</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="boundvar" title="">rec</span> : <a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a>) ->
+<a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a></span></dt><dd><p>A non standard field for easier JS integration</p>
 </dd></dl></dd><dt id="API.WebGL.Context.WebGLRenderingContext"><span class="name function" title="API.WebGL.Context.WebGLRenderingContext">WebGLRenderingContext</span><span class="word">&nbsp;:&nbsp;</span><span class="signature"><span class="type" title="Type">Type</span></span></dt><dd></dd><dt id="API.WebGL.Context.New"><span class="name constructor" title="API.WebGL.Context.New">New</span><span class="word">&nbsp;:&nbsp;</span><span class="signature">(<span class="documented boundvar" title="A reference to the canvas element which created this context.">canvas</span> : <a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a>) ->
 (<span class="documented boundvar" title="The actual width of the drawing buffer. May be different from the width&lt;br /&gt;
 attribute of the HTMLCanvasElement if the implementation is unable to&lt;br /&gt;
@@ -37,6 +47,7 @@ satisfy the requested widthor height.">drawingBufferWidth</span> : <span class="
 (<span class="documented boundvar" title="The actual height of the drawing buffer. May be different from the height&lt;br /&gt;
 attribute of the HTMLCanvasElement if the implementation is unable to&lt;br /&gt;
 satisfy the requested width or height.">drawingBufferHeight</span> : <span class="type" title="Int">Int</span>) ->
+(<span class="documented boundvar" title="A non standard field for easier JS integration">self</span> : <a class="type" title="Ptr" href="[builtins].html#Ptr">Ptr</a>) ->
 <a class="type" title="API.WebGL.Context.WebGLRenderingContextBase" href="API.WebGL.Context.html#API.WebGL.Context.WebGLRenderingContextBase">WebGLRenderingContextBase</a></span></dt><dd><dl><dt>canvas</dt><dd><p>A reference to the canvas element which created this context.</p>
 </dd><dt>drawingBufferWidth</dt><dd><p>The actual width of the drawing buffer. May be different from the width<br />
 attribute of the HTMLCanvasElement if the implementation is unable to<br />
@@ -44,4 +55,5 @@ satisfy the requested widthor height.</p>
 </dd><dt>drawingBufferHeight</dt><dd><p>The actual height of the drawing buffer. May be different from the height<br />
 attribute of the HTMLCanvasElement if the implementation is unable to<br />
 satisfy the requested width or height.</p>
+</dd><dt>self</dt><dd><p>A non standard field for easier JS integration</p>
 </dd></dl></dd></dl></div></div><footer>Produced by IdrisDoc version 1.0</footer></body></html>

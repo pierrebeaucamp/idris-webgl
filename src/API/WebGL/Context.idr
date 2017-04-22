@@ -36,6 +36,15 @@ record WebGLRenderingContextBase where
   ||| attribute of the HTMLCanvasElement if the implementation is unable to
   ||| satisfy the requested width or height.
   drawingBufferHeight : Int
+  ||| A non standard field for easier JS integration
+  self                : Ptr
+
+||| clearColor sets the clear value of the color buffer.
+-- TODO: Proper Type for clampf
+clearColor : WebGLRenderingContextBase -> (red : Double) -> (green : Double) ->
+             (blue : Double) -> (alpha : Double) -> JS_IO ()
+clearColor ctx = jscall "%0.clearColor(%1, %2, %3, %4)"
+  (JSRef -> Double -> Double -> Double -> Double -> JS_IO ()) (self ctx)
 
 WebGLRenderingContext : Type
 WebGLRenderingContext = WebGLRenderingContextBase
@@ -50,7 +59,9 @@ webGlRenderingContextFromPointer ref = let
   in
     case !(IdrisScript.pack !dbWidth) of
       (JSNumber ** w) => case !(IdrisScript.pack !dbHeight) of
-        (JSNumber ** h) => map Just $ New <$>
-                           canvas <*> pure (fromJS w) <*> pure (fromJS h)
+        (JSNumber ** h) => map Just $ New <$> canvas <*>
+                                              pure (fromJS w) <*>
+                                              pure (fromJS h) <*>
+                                              pure ref
         _               => pure Nothing
       _               => pure Nothing
