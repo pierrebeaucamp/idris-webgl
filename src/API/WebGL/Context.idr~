@@ -40,17 +40,10 @@ record WebGLRenderingContextBase where
   self                : Ptr
 
 COLOR_BUFFER_BIT : Int
-COLOR_BUFFER_BIT = 0x00004000
+COLOR_BUFFER_BIT = ?COLOR_BUFFER_BIT_rhs
 
-DEPTH_BUFFER_BIT : Int
-DEPTH_BUFFER_BIT = 0x00000100
-
-STENCIL_BUFFER_BIT : Int
-STENCIL_BUFFER_BIT = 0x00000400
-
-||| clears a buffer
 -- TODO: Proper type for GLbitfield
-clear : WebGLRenderingContextBase -> (buffer : Int) -> JS_IO ()
+clear : WebGLRenderingContextBase -> (mask : Int) -> JS_IO ()
 clear ctx = jscall "%0.clear(%1)" (JSRef -> Int -> JS_IO ()) $ self ctx
 
 ||| clearColor sets the clear value of the color buffer.
