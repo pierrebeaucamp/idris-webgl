@@ -53,6 +53,10 @@ DEPTH_BUFFER_BIT   = 0x00000100
 STENCIL_BUFFER_BIT : Int
 STENCIL_BUFFER_BIT = 0x00000400
 
+-- Begin Mode
+TRIANGLES : Int
+TRIANGLES = 0x0004
+
 attachShader : WebGLRenderingContextBase -> (program : WebGLProgram) ->
                (shader : WebGLShader) -> JS_IO ()
 attachShader ctx (New programRef) (New shaderRef) =
