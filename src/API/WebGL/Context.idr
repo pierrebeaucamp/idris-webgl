@@ -14,7 +14,11 @@
 
 module API.WebGL.Context
 
+import API.WebGL.Buffer
+import API.WebGL.Shader
+import API.WebGL.Program
 import IdrisScript
+import IdrisScript.Arrays
 
 %access public export
 %default total
@@ -39,26 +43,87 @@ record WebGLRenderingContextBase where
   ||| A non standard field for easier JS integration
   self                : Ptr
 
-COLOR_BUFFER_BIT : Int
-COLOR_BUFFER_BIT = 0x00004000
+-- ClearBufferMask
+COLOR_BUFFER_BIT   : Int
+COLOR_BUFFER_BIT   = 0x00004000
 
-DEPTH_BUFFER_BIT : Int
-DEPTH_BUFFER_BIT = 0x00000100
+DEPTH_BUFFER_BIT   : Int
+DEPTH_BUFFER_BIT   = 0x00000100
 
 STENCIL_BUFFER_BIT : Int
 STENCIL_BUFFER_BIT = 0x00000400
 
+attachShader : WebGLRenderingContextBase -> (program : WebGLProgram) ->
+               (shader : WebGLShader) -> JS_IO ()
+attachShader ctx (New programRef) (New shaderRef) =
+  jscall "%0.attachShader(%1, %2)" (JSRef -> JSRef -> JSRef -> JS_IO ())
+  (self ctx) programRef shaderRef
+
+bindBuffer : WebGLRenderingContextBase -> (target : Int) ->
+             (buffer : WebGLBuffer) -> JS_IO ()
+bindBuffer ctx target (New ref) = jscall "%0.bindBuffer(%1, %2)"
+  (JSRef -> Int -> JSRef -> JS_IO ()) (self ctx) target ref
+
+-- TODO: proper types for all arguments
+bufferData : WebGLRenderingContextBase -> (target : Int) ->
+             (srcData : List Double) -> (usage : Int) -> JS_IO ()
+bufferData ctx target srcData usage = jscall "%0.bufferData(%1, %2, %3)"
+  (JSRef -> Int -> JSRef -> Int -> JS_IO ())
+  (API.WebGL.Context.WebGLRenderingContextBase.self ctx)
+  target (IdrisScript.unpack !(toJSArray {to=JSNumber} srcData)) usage
+
+compileShader : WebGLRenderingContextBase -> (shader : WebGLShader) -> JS_IO ()
+compileShader ctx (New ref) =
+  jscall "%0.compileShader(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+
 ||| clears a buffer
--- TODO: Proper type for GLbitfield
+-- TODO: Proper type for buffer
 clear : WebGLRenderingContextBase -> (buffer : Int) -> JS_IO ()
 clear ctx = jscall "%0.clear(%1)" (JSRef -> Int -> JS_IO ()) $ self ctx
 
 ||| clearColor sets the clear value of the color buffer.
--- TODO: Proper Type for clampf
+-- TODO: Proper Type for red, green, blue, alpha
 clearColor : WebGLRenderingContextBase -> (red : Double) -> (green : Double) ->
              (blue : Double) -> (alpha : Double) -> JS_IO ()
 clearColor ctx = jscall "%0.clearColor(%1, %2, %3, %4)"
   (JSRef -> Double -> Double -> Double -> Double -> JS_IO ()) $ self ctx
+
+createBuffer : WebGLRenderingContextBase -> JS_IO WebGLBuffer
+createBuffer ctx = map API.WebGL.Buffer.New bufferRef where
+  bufferRef : JS_IO JSRef
+  bufferRef = jscall "%0.createBuffer()" (JSRef -> JS_IO JSRef) $
+              API.WebGL.Context.WebGLRenderingContextBase.self ctx
+
+createProgram : WebGLRenderingContextBase -> JS_IO WebGLProgram
+createProgram ctx = map API.WebGL.Program.New programRef where
+  programRef : JS_IO JSRef
+  programRef = jscall "%0.createProgram()" (JSRef -> JS_IO JSRef) $
+               API.WebGL.Context.WebGLRenderingContextBase.self ctx
+
+createShader : WebGLRenderingContextBase -> (type : Int) -> JS_IO WebGLShader
+createShader ctx type = map API.WebGL.Shader.New shaderRef where
+  shaderRef : JS_IO JSRef
+  shaderRef = jscall "%0.createShader(%1)" (JSRef -> Int -> JS_IO JSRef)
+              (API.WebGL.Context.WebGLRenderingContextBase.self ctx) type
+
+drawArrays : WebGLRenderingContextBase -> (mode : Int) -> (first : Int) ->
+             (count : Int) -> JS_IO ()
+drawArrays ctx = jscall "%0.drawArrays(%1, %2, %3)"
+  (JSRef -> Int -> Int -> Int -> JS_IO ()) $ self ctx
+
+linkProgram : WebGLRenderingContextBase -> (program : WebGLProgram) -> JS_IO ()
+linkProgram ctx (New ref) =
+  jscall "%0.linkProgram(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+
+useProgram : WebGLRenderingContextBase -> (program : WebGLProgram) -> JS_IO ()
+useProgram ctx (New ref) =
+  jscall "%0.useProgram(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+
+shaderSource : WebGLRenderingContextBase -> (shader : WebGLShader) ->
+               (source : String) -> JS_IO ()
+shaderSource ctx (New ref) =
+  jscall "%0.shaderSource(%1, %2)" (JSRef -> JSRef -> String -> JS_IO ())
+  (self ctx) ref
 
 WebGLRenderingContext : Type
 WebGLRenderingContext = WebGLRenderingContextBase

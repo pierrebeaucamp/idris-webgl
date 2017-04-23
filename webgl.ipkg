@@ -13,4 +13,7 @@ bugtracker = https://github.com/blau-io/idris-webgl/issues
 sourcedir = src
 pkgs      = idrisscript
 
-modules = API.WebGL.Context
+modules = API.WebGL.Buffer
+        , API.WebGL.Context
+        , API.WebGL.Program
+        , API.WebGL.Shader
