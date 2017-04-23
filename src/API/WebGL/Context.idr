@@ -66,7 +66,8 @@ attachShader ctx (New programRef) (New shaderRef) =
 bindBuffer : WebGLRenderingContextBase -> (target : Int) ->
              (buffer : WebGLBuffer) -> JS_IO ()
 bindBuffer ctx target (New ref) = jscall "%0.bindBuffer(%1, %2)"
-  (JSRef -> Int -> JSRef -> JS_IO ()) (self ctx) target ref
+                                  (JSRef -> Int -> JSRef -> JS_IO ())
+                                  (self ctx) target ref
 
 -- TODO: proper types for all arguments
 bufferData : WebGLRenderingContextBase -> (target : Int) ->
@@ -77,8 +78,8 @@ bufferData ctx target srcData usage = jscall "%0.bufferData(%1, %2, %3)"
   target (IdrisScript.unpack !(toJSArray {to=JSNumber} srcData)) usage
 
 compileShader : WebGLRenderingContextBase -> (shader : WebGLShader) -> JS_IO ()
-compileShader ctx (New ref) =
-  jscall "%0.compileShader(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+compileShader ctx (New ref) = jscall "%0.compileShader(%1)"
+                              (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
 
 ||| clears a buffer
 -- TODO: Proper type for buffer
@@ -90,7 +91,8 @@ clear ctx = jscall "%0.clear(%1)" (JSRef -> Int -> JS_IO ()) $ self ctx
 clearColor : WebGLRenderingContextBase -> (red : Double) -> (green : Double) ->
              (blue : Double) -> (alpha : Double) -> JS_IO ()
 clearColor ctx = jscall "%0.clearColor(%1, %2, %3, %4)"
-  (JSRef -> Double -> Double -> Double -> Double -> JS_IO ()) $ self ctx
+                 (JSRef -> Double -> Double -> Double -> Double -> JS_IO ()) $
+                 self ctx
 
 createBuffer : WebGLRenderingContextBase -> JS_IO WebGLBuffer
 createBuffer ctx = map API.WebGL.Buffer.New bufferRef where
@@ -113,21 +115,45 @@ createShader ctx type = map API.WebGL.Shader.New shaderRef where
 drawArrays : WebGLRenderingContextBase -> (mode : Int) -> (first : Int) ->
              (count : Int) -> JS_IO ()
 drawArrays ctx = jscall "%0.drawArrays(%1, %2, %3)"
-  (JSRef -> Int -> Int -> Int -> JS_IO ()) $ self ctx
+                 (JSRef -> Int -> Int -> Int -> JS_IO ()) $ self ctx
+
+enableVertexAttribArray : WebGLRenderingContextBase -> (index : Int) -> JS_IO ()
+enableVertexAttribArray ctx = jscall "%0.enableVertexAttribArray(%1)"
+                              (JSRef -> Int -> JS_IO ()) (self ctx)
+
+getAttribLocation : WebGLRenderingContextBase -> (program : WebGLProgram) ->
+                    (name : String) -> JS_IO $ Maybe Int
+getAttribLocation ctx (New ref) name = case !(IdrisScript.pack !attribLocation) of
+    (JSNumber ** n) => pure $ Just $ fromJS n
+    _               => pure Nothing
+  where
+    attribLocation : JS_IO JSRef
+    attribLocation = jscall "%0.getAttribLocation(%1, %2)"
+                     (JSRef -> JSRef -> String -> JS_IO JSRef)
+                     (self ctx) ref name
 
 linkProgram : WebGLRenderingContextBase -> (program : WebGLProgram) -> JS_IO ()
-linkProgram ctx (New ref) =
-  jscall "%0.linkProgram(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+linkProgram ctx (New ref) = jscall "%0.linkProgram(%1)"
+                            (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
 
 useProgram : WebGLRenderingContextBase -> (program : WebGLProgram) -> JS_IO ()
-useProgram ctx (New ref) =
-  jscall "%0.useProgram(%1)" (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
+useProgram ctx (New ref) = jscall "%0.useProgram(%1)"
+                           (JSRef -> JSRef -> JS_IO ()) (self ctx) ref
 
 shaderSource : WebGLRenderingContextBase -> (shader : WebGLShader) ->
                (source : String) -> JS_IO ()
-shaderSource ctx (New ref) =
-  jscall "%0.shaderSource(%1, %2)" (JSRef -> JSRef -> String -> JS_IO ())
-  (self ctx) ref
+shaderSource ctx (New ref) = jscall "%0.shaderSource(%1, %2)"
+                             (JSRef -> JSRef -> String -> JS_IO ())
+                             (self ctx) ref
+
+vertexAttribPointer : WebGLRenderingContextBase -> (index : Int) ->
+                      (size : Int) -> (type : Int) -> (normalized : Bool) ->
+                      (stride : Int) -> (offset : Int) -> JS_IO ()
+vertexAttribPointer ctx index size type normalized =
+  jscall "%0.vertexAttribPointer(%1, %2, %3, %4, %5, %6)"
+  (JSRef -> Int -> Int -> JSRef -> Int -> Int -> JS_IO ())
+  (API.WebGL.Context.WebGLRenderingContextBase.self ctx) index type
+  (IdrisScript.unpack (toJS {to=JSBoolean} normalized))
 
 WebGLRenderingContext : Type
 WebGLRenderingContext = WebGLRenderingContextBase
