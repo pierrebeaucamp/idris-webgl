@@ -151,8 +151,8 @@ vertexAttribPointer : WebGLRenderingContextBase -> (index : Int) ->
                       (stride : Int) -> (offset : Int) -> JS_IO ()
 vertexAttribPointer ctx index size type normalized =
   jscall "%0.vertexAttribPointer(%1, %2, %3, %4, %5, %6)"
-  (JSRef -> Int -> Int -> JSRef -> Int -> Int -> JS_IO ())
-  (API.WebGL.Context.WebGLRenderingContextBase.self ctx) index type
+  (JSRef -> Int -> Int -> Int -> JSRef -> Int -> Int -> JS_IO ())
+  (API.WebGL.Context.WebGLRenderingContextBase.self ctx) index size type
   (IdrisScript.unpack (toJS {to=JSBoolean} normalized))
 
 WebGLRenderingContext : Type
